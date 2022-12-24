@@ -1,35 +1,18 @@
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-
-# Test binary, built with `go test -c`
-*.test
-
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
-
-vendor/
-bin/
-out/
-
-.DS_Store
+# OS-specific
 Thumbs.db
-.idea
-*.key
-*.pem
+.DS_Store
 
-.env*
-
-#Robot Framework reporting files
-log.html
-output.xml
-report.html
-
-.python-version
-.venv
+# Editor specific
 .vscode
-!.vscode/launch.json
+.idea
 
+# Project specific
+.dummy
+/**/bin/
+/**/vendor/*
+go.mod.local
+!/**/.gitkeep
+
+# Local specific
+.env
+tmp/
