@@ -11,7 +11,6 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
-# Dependency directories (remove the comment below to include it)
 vendor/
 bin/
 out/
@@ -22,7 +21,6 @@ Thumbs.db
 *.key
 *.pem
 
-# Env
 .env*
 
 #Robot Framework reporting files
@@ -35,12 +33,3 @@ report.html
 .vscode
 !.vscode/launch.json
 
-# ignore deployment secret files
-*/**/secrets.yaml
-
-# ignore local s3 env files
-deployments/dockerfiles/minio/config
-deployments/dockerfiles/minio/data
-
-# for credential information
-.cred/
