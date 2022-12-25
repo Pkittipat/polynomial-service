@@ -10,8 +10,9 @@ func TestFindNextValue(t *testing.T) {
 		index int
 		want  int
 	}{
-		{name: "", index: 1, want: 8},
-		{name: "", index: 4, want: 78},
+		{name: "case_index_one", index: 1, want: 8},
+		{name: "case_index_four", index: 4, want: 78},
+		{name: "case_index_five", index: 5, want: 78},
 	}
 	for _, tc := range testcases {
 		t.Run(tc.name, func(t *testing.T) {
