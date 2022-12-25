@@ -1,0 +1,55 @@
+{
+	"info": {
+		"_postman_id": "c5c8586b-1d21-4695-8cd8-c406af6a10e6",
+		"name": "Polynomial service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13337686"
+	},
+	"item": [
+		{
+			"name": "Guess XYZ",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"x\": 3,\n    \"y\": 31,\n    \"z\": 51\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/polynomial/guess",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"polynomial",
+						"guess"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Dataset",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/polynomial/dataset",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"polynomial",
+						"dataset"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
