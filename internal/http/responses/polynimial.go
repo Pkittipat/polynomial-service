@@ -1,11 +1,11 @@
 package responses
 
-type Calculate struct {
+type GuessPayload struct {
 	IsPolynomial bool `json:"is_polynomial"`
 }
 
-func NewCalculate(isPolynomial bool) *Calculate {
-	return &Calculate{
+func NewGuessPayload(isPolynomial bool) *GuessPayload {
+	return &GuessPayload{
 		IsPolynomial: isPolynomial,
 	}
 }

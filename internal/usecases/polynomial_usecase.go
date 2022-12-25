@@ -6,7 +6,7 @@ import (
 )
 
 type PolynomialUsecase interface {
-	Calculate(x, y, z int) error
+	Guess(x, y, z int) error
 	RandomArg() (datasetRes []int)
 }
 
@@ -22,7 +22,7 @@ func NewPolynomialUsecase(
 	}
 }
 
-func (p *polynomialUsecase) Calculate(x, y, z int) error {
+func (p *polynomialUsecase) Guess(x, y, z int) error {
 	_, isPolynomial := p.pkg.ProveXYZ(x, y, z)
 	if !isPolynomial {
 		return responses.ErrInvalidPolynomial

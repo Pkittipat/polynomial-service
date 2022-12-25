@@ -11,7 +11,7 @@ import (
 )
 
 type PolynomialHandler interface {
-	Calculate(c *gin.Context)
+	Guess(c *gin.Context)
 	Dataset(c *gin.Context)
 }
 
@@ -27,24 +27,24 @@ func NewPolynomialHandler(
 	}
 }
 
-func (p *polynomialHandler) Calculate(c *gin.Context) {
-	var request requests.CalculateForm
+func (p *polynomialHandler) Guess(c *gin.Context) {
+	var request requests.GuessForm
 	if err := c.ShouldBindJSON(&request); err != nil {
 		responses.NewErrorResponse(err).Response(c, http.StatusBadRequest)
 		return
 	}
 
 	isPolynimial := true
-	if err := p.usecase.Calculate(request.X, request.Y, request.Z); err != nil {
+	if err := p.usecase.Guess(request.X, request.Y, request.Z); err != nil {
 		if !errors.Is(err, responses.ErrInvalidPolynomial) {
 			responses.NewErrorResponse(err).Response(c, http.StatusInternalServerError)
 		}
-		responses.NewResponse(responses.NewCalculate(!isPolynimial)).
+		responses.NewResponse(responses.NewGuessPayload(!isPolynimial)).
 			Response(c, http.StatusOK)
 		return
 	}
 
-	responses.NewResponse(responses.NewCalculate(isPolynimial)).
+	responses.NewResponse(responses.NewGuessPayload(isPolynimial)).
 		Response(c, http.StatusOK)
 }
 
