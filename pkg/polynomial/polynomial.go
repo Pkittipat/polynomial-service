@@ -23,30 +23,92 @@ var (
 	}
 )
 
+type Polynomial interface {
+	RandomArg() (datasetRes []int)
+	GetRoot() *Node
+	ProveXYZ(x, y, z int) ([]int, bool)
+}
+
 type polynomial struct {
 	Root *Node
 }
 
-func NewPolynomial(
-	dataset []string,
-) *polynomial {
-	if len(dataset) <= 0 {
+func NewPolynomial() Polynomial {
+	if len(defaultDataset) <= 0 {
 		return nil
 	}
-	root := createDoublyLinkedList(dataset)
+	root := createDoublyLinkedList()
 	return &polynomial{
 		Root: root,
 	}
 }
 
-func createDoublyLinkedList(slice []string) *Node {
-	var head, tail *Node
-	for i, v := range slice {
-		n := &Node{}
-		_v, err := strconv.Atoi(v)
-		if err == nil {
-			n.Value = &_v
+func (p *polynomial) GetRoot() *Node {
+	return p.Root
+}
+
+func (p *polynomial) ProveXYZ(x, y, z int) ([]int, bool) {
+	dataset := prepareDataset(p.Root, x, y, z)
+	sliceOfDiff := findDifferenceNumber(dataset, 0)
+	return dataset, isPolynomial(sliceOfDiff)
+}
+
+func (p *polynomial) RandomArg() (datasetRes []int) {
+	indexRange := createXYZIndexRange(p.Root)
+
+	for _, x := range indexRange[0] {
+		for _, y := range indexRange[1] {
+			for _, z := range indexRange[2] {
+				dataset, isPolynomial := p.ProveXYZ(x, y, z)
+				if isPolynomial {
+					return dataset
+				}
+			}
 		}
+	}
+
+	return
+}
+
+func createXYZIndexRange(head *Node) (indexRange [][]int) {
+	slice := traverseDoublyLinkedList(head)
+	indexMissingValues := findIndexMissingValues(head)
+
+	for _, missingIndex := range indexMissingValues {
+		prevVal := findPrevValue(slice[missingIndex])
+		nextVal := findNextValue(slice[missingIndex])
+		var scope []int
+		for num := prevVal; num <= nextVal; num++ {
+			scope = append(scope, num)
+		}
+		indexRange = append(indexRange, scope)
+	}
+	return indexRange
+}
+
+func prepareDataset(head *Node, x, y, z int) (result []int) {
+	current := head
+	for current != nil {
+		switch current.Value {
+		case X:
+			result = append(result, x)
+		case Y:
+			result = append(result, y)
+		case Z:
+			result = append(result, z)
+		default:
+			val, _ := strconv.Atoi(current.Value)
+			result = append(result, val)
+		}
+		current = current.Next
+	}
+	return result
+}
+
+func createDoublyLinkedList() *Node {
+	var head, tail *Node
+	for i, v := range defaultDataset {
+		n := &Node{Value: v}
 		if i == 0 {
 			head = n
 			tail = n
@@ -69,36 +131,16 @@ func traverseDoublyLinkedList(head *Node) []*Node {
 	return result
 }
 
-func findMissingValue(head *Node) {
-	slice := traverseDoublyLinkedList(head)
-	missingIndexs := []int{}
-	for index, node := range slice {
-		if node.Value == nil {
-			missingIndexs = append(missingIndexs, index)
+func findIndexMissingValues(head *Node) (slice []int) {
+	current := head
+	index := 0
+	for current != nil {
+		switch current.Value {
+		case X, Y, Z:
+			slice = append(slice, index)
 		}
-	}
-
-	var expectArgs [][]int
-	for _, missingIndex := range missingIndexs {
-		prevVal := findPrevValue(slice[missingIndex])
-		nextVal := findNextValue(slice[missingIndex])
-		var expectArr []int
-		for num := *prevVal; num <= *nextVal; num++ {
-			expectArr = append(expectArr, num)
-		}
-		expectArgs = append(expectArgs, expectArr)
-	}
-
-	// specify x represent first value.
-	for _, x := range expectArgs[0] {
-		// specify y represent second value
-		for _, y := range expectArgs[1] {
-			for _, z := range expectArgs[2] {
-				slice[missingIndexs[0]].Value = &x
-				slice[missingIndexs[1]].Value = &y
-				slice[missingIndexs[2]].Value = &z
-			}
-		}
+		index += 1
+		current = current.Next
 	}
 	return
 }
@@ -144,22 +186,24 @@ func isPolynomial(sequence []int) bool {
 	return true
 }
 
-func findPrevValue(head *Node) (prevValue *int) {
+func findPrevValue(head *Node) (prevValue int) {
 	if head == nil {
 		return
 	}
 	if head.Prev == nil {
 		return
 	}
-	if head.Prev.Value == nil {
+	switch head.Prev.Value {
+	case X, Y, Z:
 		prevValue = findPrevValue(head.Prev)
-	} else {
-		prevValue = head.Prev.Value
+	default:
+		val, _ := strconv.Atoi(head.Prev.Value)
+		prevValue = val
 	}
 	return prevValue
 }
 
-func findNextValue(head *Node) (nextValue *int) {
+func findNextValue(head *Node) (nextValue int) {
 	if head == nil {
 		return
 	}
@@ -168,54 +212,12 @@ func findNextValue(head *Node) (nextValue *int) {
 		return
 	}
 
-	nextValue = head.Next.Value
-	if nextValue == nil {
+	switch head.Next.Value {
+	case X, Y, Z:
 		nextValue = findNextValue(head.Next)
+	default:
+		val, _ := strconv.Atoi(head.Next.Value)
+		nextValue = val
 	}
 	return
 }
-
-// func (p *polynomial) Initialize(preDataset []string) {
-// 	p.preDataset = defaultDataset
-// 	if len(preDataset) > 0 {
-// 		p.preDataset = preDataset
-// 	}
-
-// 	return
-// }
-
-// func (p *polynomial) findMissingValue() {
-// 	indexMissingValue := []int{}
-// 	for idx, val := range p.preDataset {
-// 		_, err := strconv.Atoi(val)
-// 		if err != nil {
-// 			indexMissingValue = append(indexMissingValue, idx)
-// 		}
-// 	}
-
-// 	return
-// }
-
-func (p *polynomial) pareDataset() {
-	// for _, value := range p.PreDataset {
-	// 	switch value {
-	// 	case X:
-	// 		p.dataset = append(p.dataset, value)
-	// 	case Y:
-	// 		p.dataset = append(p.dataset, value)
-	// 	case Z:
-	// 		p.dataset = append(p.dataset, value)
-	// 	default:
-	// 		tmp, _ := strconv.Atoi(value)
-	// 		p.dataset = append(p.dataset, tmp)
-	// 	}
-	// }
-}
-
-// func (p *polynomial) caludate(coefficient int) int {
-// 	result := math.Pow(float64(coefficient), 3)*p.args["a"] +
-// 		math.Pow(float64(coefficient), 2) +
-// 		float64(coefficient)*p.args["c"] +
-// 		p.args["d"]
-// 	return int(result)
-// }

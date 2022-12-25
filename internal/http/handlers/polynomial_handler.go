@@ -12,6 +12,7 @@ import (
 
 type PolynomialHandler interface {
 	Calculate(c *gin.Context)
+	Dataset(c *gin.Context)
 }
 
 type polynomialHandler struct {
@@ -45,4 +46,12 @@ func (p *polynomialHandler) Calculate(c *gin.Context) {
 
 	responses.NewResponse(responses.NewCalculate(isPolynimial)).
 		Response(c, http.StatusOK)
+}
+
+func (p *polynomialHandler) Dataset(c *gin.Context) {
+	dataset := p.usecase.RandomArg()
+	responses.NewResponse(map[string]interface{}{
+		"dataset": dataset,
+	}).Response(c, http.StatusOK)
+	return
 }

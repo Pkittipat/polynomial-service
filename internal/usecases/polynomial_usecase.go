@@ -4,31 +4,41 @@ import (
 	"strconv"
 
 	"github.com/Pkittipat/polynomial-service/internal/http/responses"
+	"github.com/Pkittipat/polynomial-service/pkg/polynomial"
 )
 
 type PolynomialUsecase interface {
 	Calculate(x, y, z int) error
+	RandomArg() (datasetRes []int)
 }
 
 type polynomialUsecase struct {
+	pkg polynomial.Polynomial
 }
 
 var (
 	dataSet = []string{"1", "x", "8", "17", "y", "z", "78", "113"}
 )
 
-func NewPolynomialUsecase() PolynomialUsecase {
-	return &polynomialUsecase{}
+func NewPolynomialUsecase(
+	pkg polynomial.Polynomial,
+) PolynomialUsecase {
+	return &polynomialUsecase{
+		pkg: pkg,
+	}
 }
 
 func (p *polynomialUsecase) Calculate(x, y, z int) error {
-	dataset := prePareDataSet(x, y, z)
-	dataset = calculate(dataset, 0)
-	isPolynimial := isPolynomial(dataset)
-	if !isPolynimial {
+	_, isPolynomial := p.pkg.ProveXYZ(x, y, z)
+	if !isPolynomial {
 		return responses.ErrInvalidPolynomial
 	}
 	return nil
+}
+
+func (p *polynomialUsecase) RandomArg() (datasetRes []int) {
+	dataset := p.pkg.RandomArg()
+	return dataset
 }
 
 func prePareDataSet(x, y, z int) (result []int) {

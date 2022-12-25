@@ -4,6 +4,7 @@ import (
 	"github.com/Pkittipat/polynomial-service/config"
 	"github.com/Pkittipat/polynomial-service/internal/http/handlers"
 	"github.com/Pkittipat/polynomial-service/internal/usecases"
+	"github.com/Pkittipat/polynomial-service/pkg/polynomial"
 	"go.uber.org/dig"
 )
 
@@ -18,6 +19,9 @@ func BuildContainer() *dig.Container {
 
 	// Usecase
 	_ = container.Provide(usecases.NewPolynomialUsecase)
+
+	// pkg
+	_ = container.Provide(polynomial.NewPolynomial)
 
 	return container
 }
