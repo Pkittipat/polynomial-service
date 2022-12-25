@@ -50,8 +50,9 @@ func (p *polynomialHandler) Calculate(c *gin.Context) {
 
 func (p *polynomialHandler) Dataset(c *gin.Context) {
 	dataset := p.usecase.RandomArg()
-	responses.NewResponse(map[string]interface{}{
-		"dataset": dataset,
-	}).Response(c, http.StatusOK)
+
+	responses.NewResponse(
+		responses.NewDatasetPayload(dataset),
+	).Response(c, http.StatusOK)
 	return
 }
