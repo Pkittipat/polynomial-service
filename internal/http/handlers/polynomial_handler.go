@@ -49,10 +49,10 @@ func (p *polynomialHandler) Guess(c *gin.Context) {
 }
 
 func (p *polynomialHandler) Dataset(c *gin.Context) {
-	dataset := p.usecase.RandomArg()
+	dataset, degree, diff := p.usecase.RandomArg()
 
 	responses.NewResponse(
-		responses.NewDatasetPayload(dataset),
+		responses.NewDatasetPayload(dataset, degree, diff),
 	).Response(c, http.StatusOK)
 	return
 }
