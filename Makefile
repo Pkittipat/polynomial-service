@@ -30,7 +30,3 @@ help:
 start:
 	@: # Start the server
 	$(GO) run cmd/server/main.go
-
-lint:
-	@: # Run golangci-lint
-	$(GOLANGCILINT) run $(ARGS)
