@@ -30,7 +30,7 @@ func NewPolynomialHandler(
 func (p *polynomialHandler) Calculate(c *gin.Context) {
 	var request requests.CalculateForm
 	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		responses.NewErrorResponse(err).Response(c, http.StatusBadRequest)
 		return
 	}
 
