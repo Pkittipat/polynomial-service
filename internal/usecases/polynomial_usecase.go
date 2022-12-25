@@ -7,7 +7,7 @@ import (
 
 type PolynomialUsecase interface {
 	Guess(x, y, z int) error
-	RandomArg() (datasetRes []int)
+	RandomArg() (datasetRes []int, degree, diff int)
 }
 
 type polynomialUsecase struct {
@@ -30,7 +30,7 @@ func (p *polynomialUsecase) Guess(x, y, z int) error {
 	return nil
 }
 
-func (p *polynomialUsecase) RandomArg() (datasetRes []int) {
+func (p *polynomialUsecase) RandomArg() (datasetRes []int, degree, diff int) {
 	dataset := p.pkg.RandomArg()
-	return dataset
+	return dataset, p.pkg.GetDegree(), p.pkg.GetDiff()
 }

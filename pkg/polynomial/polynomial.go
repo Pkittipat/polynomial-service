@@ -8,6 +8,8 @@ const (
 	X = "X"
 	Y = "Y"
 	Z = "Z"
+
+	DEGREE = 3
 )
 
 var (
@@ -27,10 +29,13 @@ type Polynomial interface {
 	RandomArg() (datasetRes []int)
 	GetRoot() *Node
 	ProveXYZ(x, y, z int) ([]int, bool)
+	GetDegree() int
+	GetDiff() int
 }
 
 type polynomial struct {
 	Root *Node
+	diff int
 }
 
 func NewPolynomial() Polynomial {
@@ -43,6 +48,14 @@ func NewPolynomial() Polynomial {
 	}
 }
 
+func (p *polynomial) GetDegree() int {
+	return DEGREE
+}
+
+func (p *polynomial) GetDiff() int {
+	return p.diff
+}
+
 func (p *polynomial) GetRoot() *Node {
 	return p.Root
 }
@@ -50,6 +63,7 @@ func (p *polynomial) GetRoot() *Node {
 func (p *polynomial) ProveXYZ(x, y, z int) ([]int, bool) {
 	dataset := prepareDataset(p.Root, x, y, z)
 	sliceOfDiff := findDifferenceNumber(dataset, 0)
+	p.diff = sliceOfDiff[0]
 	return dataset, isPolynomial(sliceOfDiff)
 }
 
@@ -145,7 +159,7 @@ func findIndexMissingValues(head *Node) (slice []int) {
 	return
 }
 
-func findDifferenceNumber(dataset []int, degree int) (sequence []int) {
+func findDifferenceNumber(dataset []int, currentDegree int) (sequence []int) {
 	for index, value := range dataset {
 		if index+1 == len(dataset) {
 			break
@@ -154,8 +168,8 @@ func findDifferenceNumber(dataset []int, degree int) (sequence []int) {
 		sequence = append(sequence, diff)
 	}
 
-	degree += 1
-	if degree >= 3 {
+	currentDegree += 1
+	if currentDegree >= DEGREE {
 		return
 	}
 
@@ -167,7 +181,7 @@ func findDifferenceNumber(dataset []int, degree int) (sequence []int) {
 		return
 	}
 
-	return findDifferenceNumber(sequence, degree)
+	return findDifferenceNumber(sequence, currentDegree)
 }
 
 func isPolynomial(sequence []int) bool {
