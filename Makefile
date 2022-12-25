@@ -26,6 +26,9 @@ help:
 			}; \
 		} \
 	' Makefile
+setup:
+	@: # setup dependencies
+	$(GO) mod tidy
 
 start:
 	@: # Start the server
