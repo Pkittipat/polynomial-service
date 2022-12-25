@@ -1,6 +1,8 @@
 package polynomial
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestFindNextValue(t *testing.T) {
 	polynomial := NewPolynomial()
@@ -90,6 +92,44 @@ func TestIsPolynomial(t *testing.T) {
 			got := isPolynomial(tc.arg)
 			if tc.want != got {
 				t.Errorf("expexted: %v, accepted: %v", tc.want, got)
+			}
+		})
+	}
+}
+
+func TestPrepareDataset(t *testing.T) {
+	polynomial := NewPolynomial()
+	type args struct {
+		x int
+		y int
+		z int
+	}
+	testcases := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{
+			name: "case_equal",
+			args: args{
+				x: 1,
+				y: 2,
+				z: 3,
+			},
+			want: []int{1, 1, 8, 17, 2, 3, 78, 113},
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := prepareDataset(polynomial.GetRoot(), tc.args.x, tc.args.y, tc.args.z)
+			if len(tc.want) != len(got) {
+				t.Errorf("expected: %v, accepted: %v", tc.want, got)
+			}
+			for i, v := range tc.want {
+				if got[i] != v {
+					t.Errorf("expected: %v, accepted: %v", tc.want, got)
+				}
 			}
 		})
 	}
