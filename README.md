@@ -20,3 +20,37 @@ Returns a JSON response with the folling parameters:
 
 #### GET /polynomial/dataset
 Returns the dataset of [1, x, 8, 17, y, z, 78, 113] with random x, y and z already.
+
+## Example
+### Request
+```Perl
+POST /polynomial/guess
+{
+  "x": 3,
+  "y": 31,
+  "z": 51
+}
+```
+### Response
+```Perl
+{
+  "status": {
+    "message": "OK"
+  },
+  "data": {
+    "is_polynomial": true
+  }
+}
+```
+### Response Error
+#### 400 - Bad Request
+```Perl
+400 - Bad Request
+500 - Internal Server Error
+{
+  "status": {
+    "message": ""
+  },
+  "data": null
+}
+```
