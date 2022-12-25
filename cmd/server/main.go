@@ -64,7 +64,7 @@ func setupRoutes(app *gin.Engine, container *dig.Container) {
 
 	polynomialGroup := app.Group("/polynomial")
 	{
-		polynomialGroup.POST("/calculate", polynomialHandler.Calculate)
+		polynomialGroup.POST("/guess", polynomialHandler.Calculate)
 		polynomialGroup.GET("/dataset", polynomialHandler.Dataset)
 	}
 }
