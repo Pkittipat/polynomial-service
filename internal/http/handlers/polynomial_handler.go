@@ -54,5 +54,4 @@ func (p *polynomialHandler) Dataset(c *gin.Context) {
 	responses.NewResponse(
 		responses.NewDatasetPayload(dataset),
 	).Response(c, http.StatusOK)
-	return
 }

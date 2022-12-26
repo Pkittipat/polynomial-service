@@ -9,7 +9,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const projectDirName = "{{ .ProjectDirectory }}"
+const projectDirName = "polynomial-service"
 
 func loadEnv() error {
 	var (
